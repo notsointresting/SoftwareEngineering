@@ -1,0 +1,144 @@
+from datetime import date 
+import Medium as M 
+import mysql.connector
+import GetPass as G #Importing Database and other passwords.
+import os
+import sys
+
+
+#It's version 2
+#Because i've created database on cloud.
+
+
+
+
+today = date.today() # To get Today's Date.
+
+db=mysql.connector.connect(host=G.HOST,user=G.DB_USER,passwd=G.DB_PASS,database=G.DB_NAME)
+cursor=db.cursor()
+
+
+
+
+print('-------------------------------------------Birthday Service and Festival-------------------------------')
+
+G.Menu()
+
+choice = int(input("ENTER YOUR CHOICE---> "))
+
+#To Fetch Data's Records
+def showData():
+    cursor.execute('SELECT * FROM Testing')
+    data = cursor.fetchall()
+    for d in data:
+       print(d)
+
+#To Fetch Festival's Records
+def showFestivals():
+    cursor.execute('SELECT * FROM Festivals')
+    data = cursor.fetchall()
+    for d in data:
+       print(d)
+
+def getData():
+    global Email_ID 
+    global Month 
+    global Name 
+    global Number
+    global Holiday
+    global Date
+
+    Holiday,Date = [],[]
+
+    Email_ID,Month,Name,Number = [],[],[],[]
+
+    #To get Birthday's table data
+    cursor.execute('SELECT * FROM Testing')
+    data = cursor.fetchall()
+    for d in data:
+        Email_ID += [d[1]]
+        #Month+=[(str(d[3])).split('-')] 
+        Name +=  [d[0]]  
+        #Number += [d[2]]
+        #print(d)
+
+    #To get Festival's table data
+    cursor.execute('SELECT * FROM Festivals')
+    data = cursor.fetchall()
+    for d in data:
+        Holiday += [d[0]]
+        Date += [(str(d[1])).split('-')]
+
+        
+
+    
+
+
+def checkBirthdayToday():
+    Flag = False 
+    getData()
+    for i in range(len(Month)):
+        for j in range(len(Month[i])):
+            if Month[i][j]==str(today.month) and Month[i][j-1]==str(today.day):
+                Flag = True
+                print("List of Person's who have birthday today!")
+                print(Name[i])
+
+    if Flag:
+        print("Birthday Wishes are sent!")
+    else:
+        print("No One's has today birthday")
+                
+                #M.sendMail(Name[i],Email_ID[i]) #This will send Mail to the person
+                #M.sendWTPM(Name[i][j],Number[i]) #This will send Whatsapp Message to the person
+                
+
+def checkFestivalToday():
+    Flag = False
+    getData()
+    for i in range(len(Date)):
+        for j in range(len(Date[i])):
+            if str(today.month) == Date[i][j] and str(today.day) == Date[i][j-1]:
+                for filename in os.listdir('.'):
+                    if filename.startswith(Holiday[i]):
+                        Flag = True
+                        print("Press Ctrl+D after entering content!")
+                        Text = sys.stdin.readline()
+                        
+                        # The for loop will send emails to all present in table of Data.
+                        for mail in Email_ID:            
+                            M.sendFM(Text,mail)
+                            
+                        # The for loop will send Whatsapp Message to all present in table of Data.
+                        #for Number in Number:
+                        #    M.sendFMWT(Number[i],Photo.name,Text)
+                        #Photo.close()   # Closed opened file
+    if Flag:
+        print("Festival wishes sent!")
+    else:
+        print("No Festival Today")
+
+while choice!=5:
+    if choice == 1:
+        showData()
+    elif choice == 2:
+        showFestivals()
+    elif choice == 3:
+        checkBirthdayToday()
+    elif choice == 4:
+        checkFestivalToday()
+    elif choice == 5:
+        break
+    else:
+        print("Invalid Choice (1-5) only!")
+    choice = int(input("ENTER YOUR CHOICE---> "))
+print("Thank you for choosing our service!")
+
+
+
+                        
+                
+
+
+
+
