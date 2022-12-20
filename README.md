@@ -1,2 +1,3 @@
-# SoftwareEngineering
-Python Code files
+# Software Engineering
+The repository contains, 
+Continus assessments and Lab assessments
