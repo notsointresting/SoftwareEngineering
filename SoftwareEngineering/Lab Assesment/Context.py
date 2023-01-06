@@ -1,7 +1,7 @@
 import os
 
 from PIL import Image, ImageFont, ImageDraw
-import win32com.client as win32
+#import win32com.client as win32
 
 def GetContext(Name):
     title_font = ImageFont.truetype('PlayfairDisplay-Italic.ttf',32)
