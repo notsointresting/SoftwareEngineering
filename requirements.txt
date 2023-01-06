@@ -1,0 +1,6 @@
+smtplib
+mysql.connector
+pywhatkit
+urllib
+pillow
+
