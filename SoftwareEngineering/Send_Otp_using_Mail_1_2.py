@@ -10,26 +10,23 @@ def genrateOtp():
     otp = ''.join([str(random.randint(0,9)) for i in range(Length)]) #Generated OTP using random.randint()
     return otp
 
-
-server = smtplib.SMTP('smtp.gmail.com',587) #Created gmail's server, and connected to gmail API
-# Adding transfer layered security
-server.starttls()
-server.login(Sender_Mail,password) # Email, App password are inserted.
-    
-    
-
-
-    
-
-Name = input("Enter Receiver's First Name:- ")
-Email = input("Enter Reciptant's Email address:- ")
-
-
-def sendMail():
+def sendMail(Sender_Mail,password):
+    serverLogin(Sender_Mail,password)
     msg = 'Subject: Sending Mail using Python (smtplib)!\n\nHello '+Name+', Your OTP is '+str(genrateOtp())
     #Inserted Sender email ID, Recevier email ID.
     server.sendmail(Sender_Mail,Email,msg)
     print("Email Sent!")
+
+def serverLogin(Sender_Mail,password):
+    server = smtplib.SMTP('smtp.gmail.com',587) #Created gmail's server, and connected to gmail API
+    # Adding transfer layered security
+    server.starttls()
+    server.login(Sender_Mail,password) # Email, App password are inserted.
+    
+Name = input("Enter Receiver's First Name:- ")
+Email = input("Enter Reciptant's Email address:- ")
+
+
 
 
 sendMail()
